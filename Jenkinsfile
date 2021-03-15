@@ -3,11 +3,16 @@ pipeline {
     agent any
 
     stages {
-        /* stage('build') {
+        stage('build') {
             steps {
                 sh './gradlew clean'
             }
-        } */
+        }
+        stage('check') {
+            steps {
+                input "Does the staging environment look ok?"
+            }
+        }
         stage('Smoke Test') {
             steps {
                 sh './gradlew clean test -Dcucumber.options="src/test/resources/SmokeTest/SmokeTest.feature"'
