@@ -8,16 +8,20 @@ pipeline {
                 sh './gradlew clean'
             }
         } */
-        stage('Test') {
+        stage('Smoke Test') {
             steps {
                 sh './gradlew clean test -Dcucumber.options="src/test/resources/SmokeTest/SmokeTest.feature"'
-            }
-        }
-        stage('Test Reports') {
-            steps {
                 cucumber buildStatus: 'UNSTABLE',
                 reportTitle: 'Smoke Test',
-                fileIncludePattern: '**/*.json'
+                fileIncludePattern: '**/Smoke.json'
+            }
+        }
+        stage('Sanity Test') {
+            steps {
+                sh './gradlew clean test -Dcucumber.options="src/test/resources/SanityTest/SanityTest.feature"'
+                cucumber buildStatus: 'UNSTABLE',
+                reportTitle: 'Sanity Test',
+                fileIncludePattern: '**/Sanity.json'
             }
         }
         stage('Sanity check') {
